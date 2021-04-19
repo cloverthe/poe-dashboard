@@ -1,9 +1,19 @@
 package com.clover.poedash.data;
 
 
+import java.util.List;
+import java.util.Map;
+
 import javax.persistence.EntityManager;
+import javax.persistence.TypedQuery;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
+import com.clover.poedash.model.Match;
+
+import org.hibernate.sql.Select;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.BatchStatus;
@@ -24,11 +34,22 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
         this.em = em;
     }
 
+
+    public List<Match> findAll() {
+      CriteriaBuilder cb = em.getCriteriaBuilder();
+      CriteriaQuery<Match> cq = cb.createQuery(Match.class);
+      Root<Match> rootEntry = cq.from(Match.class);
+      CriteriaQuery<Match> all = cq.select(rootEntry);
+      TypedQuery<Match> allQuery = em.createQuery(all);
+      return allQuery.getResultList();
+  }  
+
   @Override
   @Transactional
   public void afterJob(JobExecution jobExecution) {
     if(jobExecution.getStatus() == BatchStatus.COMPLETED) {
       log.info("!!! JOB FINISHED! Time to verify the results");
+      findAll().forEach(System.out::println);
      }
     }
 }
