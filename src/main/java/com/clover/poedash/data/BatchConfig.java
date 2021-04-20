@@ -45,7 +45,8 @@ public class BatchConfig {
             {
                 setTargetType(MatchInput.class);
             }
-        }).build();
+        }).linesToSkip(1)
+        .build();
         
     }
 

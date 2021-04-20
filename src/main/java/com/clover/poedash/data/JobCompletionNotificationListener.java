@@ -1,6 +1,5 @@
 package com.clover.poedash.data;
 
-
 import java.util.List;
 import java.util.Map;
 
@@ -12,6 +11,7 @@ import javax.persistence.criteria.Root;
 import javax.transaction.Transactional;
 
 import com.clover.poedash.model.Match;
+import com.clover.poedash.repositories.MatchRepository;
 
 import org.hibernate.sql.Select;
 import org.slf4j.Logger;
@@ -34,52 +34,21 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
         this.em = em;
     }
 
+    @Autowired
+    private MatchRepository matchRepository;
 
-    public List<Match> findAll() {
-      CriteriaBuilder cb = em.getCriteriaBuilder();
-      CriteriaQuery<Match> cq = cb.createQuery(Match.class);
-      Root<Match> rootEntry = cq.from(Match.class);
-      CriteriaQuery<Match> all = cq.select(rootEntry);
-      TypedQuery<Match> allQuery = em.createQuery(all);
-      return allQuery.getResultList();
-  }  
-
-  @Override
-  @Transactional
-  public void afterJob(JobExecution jobExecution) {
-    if(jobExecution.getStatus() == BatchStatus.COMPLETED) {
-      log.info("!!! JOB FINISHED! Time to verify the results");
-      findAll().forEach(System.out::println);
-     }
+    @Override
+    @Transactional
+    public void afterJob(JobExecution jobExecution) {
+        if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
+            log.info("!!! JOB FINISHED!");
+            log.warn("LOOK! -> " + matchRepository.findByAccountIgnoreCase("alkaizerx").stream().findAny().orElse(null));
+            log.warn("died: " + matchRepository.findAll()
+            .stream()
+            .filter(e -> e.getDead().equals(true))
+            .count()
+            );
+            
+        }
     }
 }
-      
-    //   Map<String, Team> teamData = new HashMap<>();
-            
-    //   em.createQuery("select m.team1, count(*) from Match m group by m.team1", Object[].class)
-    //     .getResultList()
-    //     .stream()
-    //     .map(e -> new Team((String) e[0], (long) e[1]))
-    //     .forEach(team -> teamData.put(team.getTeamName(), team));
-    
-    //     em.createQuery("select m.team2, count(*) from Match m group by m.team2", Object[].class)
-    //     .getResultList()
-    //     .stream()
-    //     .forEach(e -> {
-    //         Team team = teamData.get((String) e[0]);
-    //         team.setTotalMatches(team.getTotalMatches() + (long) e[1]);
-    //     });
-
-    //     em.createQuery("select m.matchWinner, count(*) from Match m group by m.matchWinner", Object[].class)
-    //     .getResultList()
-    //     .stream()
-    //     .forEach(e -> {
-    //         Team team = teamData.get((String) e[0]);
-    //         if (team != null) team.setTotalWins((long) e[1]);
-    //     });
-
-    //     teamData.values().forEach(team -> em.persist(team));
-    //     teamData.values().forEach(team -> System.out.println(team));
-    // }
-//   }
-// }
