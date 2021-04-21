@@ -42,12 +42,12 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
     public void afterJob(JobExecution jobExecution) {
         if (jobExecution.getStatus() == BatchStatus.COMPLETED) {
             log.info("!!! JOB FINISHED!");
-            log.warn("LOOK! -> " + matchRepository.findByAccountIgnoreCase("alkaizerx").stream().findAny().orElse(null));
-            log.warn("died: " + matchRepository.findAll()
-            .stream()
-            .filter(e -> e.getDead().equals(true))
-            .count()
-            );
+            // log.warn("LOOK! -> " + matchRepository.findByAccountIgnoreCase("alkaizerx").stream().findAny().orElse(null));
+            // log.warn("died: " + matchRepository.findAll()
+            // .stream()
+            // .filter(e -> e.getDead().equals(true))
+            // .count()
+            // );
             
         }
     }

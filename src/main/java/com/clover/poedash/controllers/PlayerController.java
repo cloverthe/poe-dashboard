@@ -8,12 +8,14 @@ import com.clover.poedash.repositories.MatchRepository;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
 @Controller
+@CrossOrigin(origins = "http://localhost:4200")
 @RequestMapping(path = "/players")
 public class PlayerController {
     @Autowired
@@ -39,7 +41,7 @@ public class PlayerController {
         .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "searchByAccount/{name}")
+    @GetMapping(path = "searchByAccount={name}")
     public @ResponseBody Iterable<Match> getAllPlayersByName(@PathVariable String name){
         return matchRepository.findByAccountIgnoreCaseContaining(name);
     }
