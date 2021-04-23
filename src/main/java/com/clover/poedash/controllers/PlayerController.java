@@ -1,6 +1,5 @@
 package com.clover.poedash.controllers;
 
-import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 import com.clover.poedash.model.Match;
@@ -41,7 +40,7 @@ public class PlayerController {
         .collect(Collectors.toList());
     }
 
-    @GetMapping(path = "searchByAccount={name}")
+    @GetMapping(path = "searchByAccount/{name}")
     public @ResponseBody Iterable<Match> getAllPlayersByName(@PathVariable String name){
         return matchRepository.findByAccountIgnoreCaseContaining(name);
     }
