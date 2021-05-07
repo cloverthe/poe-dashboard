@@ -19,11 +19,11 @@ public class JobCompletionNotificationListener extends JobExecutionListenerSuppo
     private static final Logger log = LoggerFactory.getLogger(JobCompletionNotificationListener.class);
 
 
-    private MatchRepository matchRepository;
+    // private MatchRepository matchRepository;
 
     @Autowired
     public JobCompletionNotificationListener(MatchRepository matchRepository) {
-        this.matchRepository = matchRepository;
+        // this.matchRepository = matchRepository;
     }
 
   
